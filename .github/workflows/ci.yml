@@ -24,12 +24,8 @@ jobs:
       - name: Test
         run: cargo test
   format:
-    name: Cargo format (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+    name: Cargo format
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -50,10 +46,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
       - uses: Swatinem/rust-cache@v2
-      - run: cargo install cross
       - name: Build
-        run: cross build --target ${{ matrix.target }}
+        run: cargo build --target ${{ matrix.target }}
   wasm:
     name: Cargo wasm build
     runs-on: ubuntu-latest
